@@ -1,22 +1,21 @@
 # Pokemon App 🐱‍👤
 
-Aplicación de ejemplo creada con React Native y Expo, usando la plantilla blank.
+Aplicación de ejemplo creada con **React Native y Expo**, usando la plantilla **blank**.
 
-Este proyecto se utiliza para practicar conceptos básicos de React Native como:
+Este proyecto sirve para practicar conceptos básicos de React Native:
+- Componentes
+- Estados (`useState`)
+- Efectos (`useEffect`)
+- Listados con `ScrollView`
+- Interacción con `TouchableOpacity`
+- Consumo de APIs con `fetch`
+- Mostrar imágenes remotas
 
-Componentes
+---
 
-useState y useEffect
+## 🚀 Creación del proyecto
 
-ScrollView
-
-TouchableOpacity
-
-Imágenes
-
-Consumo de APIs con fetch
-
-# 🚀 Creación del proyecto
+```bash
 # Crear el proyecto con plantilla en blanco
 npx create-expo-app Pokemon --template blank
 
@@ -25,43 +24,60 @@ cd Pokemon
 
 # Ejecutar la aplicación
 npm start
+````
 
+Al ejecutar `npm start` se abrirá **Expo Dev Tools**, desde donde se puede:
 
-Al ejecutar npm start se abrirá Expo Dev Tools, desde donde puedes:
+* Escanear el QR con **Expo Go**
+* Ejecutar en **Android Emulator**
+* Ejecutar en **Web**
 
-Escanear el QR con Expo Go (Android / iOS)
+---
 
-Ejecutar en Android Emulator
+## 📦 Dependencias para Web
 
-Ejecutar en Web
+Para poder ejecutar el proyecto en navegador es necesario instalar:
 
-📦 Instalación de dependencias necesarias para Web
+```bash
 npx expo install react-dom react-native-web
+```
 
-📁 Estructura del proyecto
+---
+
+## 📁 Estructura del proyecto
+
+```text
 Pokemon/
 ├── App.js            # Archivo principal de la aplicación
 ├── package.json      # Dependencias y scripts
 ├── node_modules/     # Librerías instaladas
 ├── assets/           # Imágenes y recursos estáticos
 └── app.json          # Configuración de Expo
+```
 
+* `App.js` contiene toda la lógica principal.
+* `assets/` se utiliza para imágenes locales.
+* `app.json` contiene la configuración de Expo.
 
-App.js: contiene la lógica principal y los componentes.
+---
 
-assets/: carpeta para imágenes locales.
+## 🧠 Conceptos practicados
 
-app.json: configuración del proyecto Expo.
+### Estados y efectos
 
-🧠 Conceptos practicados
-1️⃣ Estados y efectos
+```javascript
 const [contador, setContador] = useState(0);
 
 useEffect(() => {
   console.log("Componente cargado");
 }, []);
+```
 
-2️⃣ Listas con ScrollView y TouchableOpacity
+---
+
+### Listas con ScrollView y TouchableOpacity
+
+```javascript
 <ScrollView>
   {lista.map(item => (
     <TouchableOpacity
@@ -72,8 +88,13 @@ useEffect(() => {
     </TouchableOpacity>
   ))}
 </ScrollView>
+```
 
-3️⃣ Consumo de API con fetch (PokeAPI)
+---
+
+### Consumo de API con fetch
+
+```javascript
 useEffect(() => {
   async function cargarDatos() {
     try {
@@ -89,18 +110,27 @@ useEffect(() => {
 
   cargarDatos();
 }, []);
+```
 
+La propiedad `results` pertenece al JSON devuelto por la API y contiene la lista de Pokémon.
 
-📌 results es una propiedad del JSON devuelto por la API que contiene la lista de Pokémon.
+---
 
-4️⃣ Mostrar imágenes remotas
+### Mostrar imágenes remotas
+
+```javascript
 <Image
   source={{ uri: pokemon.sprites.front_default }}
   style={{ width: 200, height: 200 }}
   resizeMode="contain"
 />
+```
 
-🧪 Comandos útiles
+---
+
+## 🧪 Comandos útiles
+
+```bash
 # Instalar dependencias
 npm install
 
@@ -109,25 +139,29 @@ npm start
 
 # Limpiar caché si hay errores
 npx expo start -c
+```
 
-📝 Recomendación para el examen
+---
 
-Crear el proyecto:
+## 📝 Recomendación para el examen
 
+1. Crear el proyecto con:
+
+```bash
 npx create-expo-app Pokemon --template blank
+```
 
+2. Instalar dependencias necesarias.
+3. Implementar una lista y una vista de detalle.
+4. Ejecutar la aplicación con:
 
-Instalar dependencias web si es necesario.
-
-Implementar:
-
-Lista de Pokémon
-
-Detalle del Pokémon
-
-Ejecutar con:
-
+```bash
 npm start
+```
 
+5. Probar con Expo Go o en Web.
 
-Probar con Expo Go o en Web.
+---
+
+Proyecto de práctica para **React Native + Expo**.
+
