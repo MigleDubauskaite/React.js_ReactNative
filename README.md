@@ -1,262 +1,133 @@
-# \# Pokemon App
+# Pokemon App 🐱‍👤
 
-# 
+Aplicación de ejemplo creada con React Native y Expo, usando la plantilla blank.
 
-# Esta es una aplicación de ejemplo creada con \*\*React Native y Expo\*\*, usando una plantilla \*\*en blanco\*\* (`blank`).
+Este proyecto se utiliza para practicar conceptos básicos de React Native como:
 
-# El proyecto sirve para practicar conceptos básicos de React Native: componentes, `useState`, `useEffect`, ScrollView, TouchableOpacity, imágenes y fetch de APIs.
+Componentes
 
-# 
+useState y useEffect
 
-# ---
+ScrollView
 
-# 
+TouchableOpacity
 
-# \## Comandos para crear el proyecto
+Imágenes
 
-# 
+Consumo de APIs con fetch
 
-# ```bash
+# 🚀 Creación del proyecto
+# Crear el proyecto con plantilla en blanco
+npx create-expo-app Pokemon --template blank
 
-# \# Crear proyecto con plantilla en blanco
+# Entrar en la carpeta del proyecto
+cd Pokemon
 
-# npx create-expo-app Pokemon --template blank
+# Ejecutar la aplicación
+npm start
 
-# 
 
-# \# Entrar en la carpeta del proyecto
+Al ejecutar npm start se abrirá Expo Dev Tools, desde donde puedes:
 
-# cd Pokemon
+Escanear el QR con Expo Go (Android / iOS)
 
-# 
+Ejecutar en Android Emulator
 
-# \# Ejecutar la app
+Ejecutar en Web
 
-# npm start
+📦 Instalación de dependencias necesarias para Web
+npx expo install react-dom react-native-web
 
-# ```
+📁 Estructura del proyecto
+Pokemon/
+├── App.js            # Archivo principal de la aplicación
+├── package.json      # Dependencias y scripts
+├── node_modules/     # Librerías instaladas
+├── assets/           # Imágenes y recursos estáticos
+└── app.json          # Configuración de Expo
 
-# 
 
-# > Esto abrirá Expo Dev Tools. Desde ahí puedes:
+App.js: contiene la lógica principal y los componentes.
 
-# >
+assets/: carpeta para imágenes locales.
 
-# > \* Escanear el QR en tu teléfono con \*\*Expo Go\*\*.
+app.json: configuración del proyecto Expo.
 
-# > \* Ejecutar en \*\*Android Emulator\*\*.
+🧠 Conceptos practicados
+1️⃣ Estados y efectos
+const [contador, setContador] = useState(0);
 
-# > \* Ejecutar en \*\*iOS Simulator\*\* (solo Mac).
+useEffect(() => {
+  console.log("Componente cargado");
+}, []);
 
-# 
+2️⃣ Listas con ScrollView y TouchableOpacity
+<ScrollView>
+  {lista.map(item => (
+    <TouchableOpacity
+      key={item.name}
+      onPress={() => verDetalle(item)}
+    >
+      <Text>{item.name}</Text>
+    </TouchableOpacity>
+  ))}
+</ScrollView>
 
-# ---
+3️⃣ Consumo de API con fetch (PokeAPI)
+useEffect(() => {
+  async function cargarDatos() {
+    try {
+      const res = await fetch("https://pokeapi.co/api/v2/pokemon");
+      const data = await res.json();
+      setLista(data.results);
+    } catch (error) {
+      setError("Error al cargar datos");
+    } finally {
+      setCargando(false);
+    }
+  }
 
-# 
+  cargarDatos();
+}, []);
 
-# \## Estructura del proyecto
 
-# 
+📌 results es una propiedad del JSON devuelto por la API que contiene la lista de Pokémon.
 
-# ```
+4️⃣ Mostrar imágenes remotas
+<Image
+  source={{ uri: pokemon.sprites.front_default }}
+  style={{ width: 200, height: 200 }}
+  resizeMode="contain"
+/>
 
-# Pokemon/
+🧪 Comandos útiles
+# Instalar dependencias
+npm install
 
-# ├── App.js           # Archivo principal de la app
+# Ejecutar el proyecto
+npm start
 
-# ├── package.json     # Dependencias y scripts
+# Limpiar caché si hay errores
+npx expo start -c
 
-# ├── node\_modules/    # Librerías instaladas
+📝 Recomendación para el examen
 
-# └── assets/          # Imágenes y recursos estáticos
+Crear el proyecto:
 
-# ```
+npx create-expo-app Pokemon --template blank
 
-# 
 
-# \* `App.js` es donde escribirás tus componentes y lógica principal.
+Instalar dependencias web si es necesario.
 
-# \* `assets/` sirve para guardar imágenes locales si las necesitas.
+Implementar:
 
-# 
+Lista de Pokémon
 
-# ---
+Detalle del Pokémon
 
-# 
+Ejecutar con:
 
-# \## Conceptos que puedes practicar
+npm start
 
-# 
 
-# 1\. \*\*Estados y efectos\*\*
-
-# 
-
-# ```javascript
-
-# const \[contador, setContador] = useState(0);
-
-# useEffect(() => { console.log("Hola!"); }, \[]);
-
-# ```
-
-# 
-
-# 2\. \*\*Listas con ScrollView y TouchableOpacity\*\*
-
-# 
-
-# ```javascript
-
-# <ScrollView>
-
-# &nbsp; {lista.map(item => (
-
-# &nbsp;   <TouchableOpacity key={item.id} onPress={() => verDetalle(item)}>
-
-# &nbsp;     <Text>{item.name}</Text>
-
-# &nbsp;   </TouchableOpacity>
-
-# &nbsp; ))}
-
-# </ScrollView>
-
-# ```
-
-# 
-
-# 3\. \*\*Fetch de API y manejo de loading/error\*\*
-
-# 
-
-# ```javascript
-
-# useEffect(() => {
-
-# &nbsp; async function cargarDatos() {
-
-# &nbsp;   try {
-
-# &nbsp;     const res = await fetch("https://pokeapi.co/api/v2/pokemon");
-
-# &nbsp;     const data = await res.json();
-
-# &nbsp;     setLista(data.results);
-
-# &nbsp;   } catch {
-
-# &nbsp;     setError("Error al cargar");
-
-# &nbsp;   } finally {
-
-# &nbsp;     setCargando(false);
-
-# &nbsp;   }
-
-# &nbsp; }
-
-# &nbsp; cargarDatos();
-
-# }, \[]);
-
-# ```
-
-# 
-
-# 4\. \*\*Mostrar imágenes remotas y calcular tamaño\*\*
-
-# 
-
-# ```javascript
-
-# <Image
-
-# &nbsp; source={{ uri: pokemon.sprites.front\_default }}
-
-# &nbsp; style={{ width: 200, height: 200 }}
-
-# &nbsp; resizeMode="contain"
-
-# />
-
-# ```
-
-# 
-
-# ---
-
-# 
-
-# \## Comandos útiles para el examen
-
-# 
-
-# ```bash
-
-# \# Instalar dependencias
-
-# npm install
-
-# 
-
-# \# Ejecutar en Expo
-
-# npm start
-
-# 
-
-# \# Limpiar cache (si da errores)
-
-# expo start -c
-
-# ```
-
-# 
-
-# ---
-
-# 
-
-# \## Recomendación para el examen
-
-# 
-
-# 1\. Crear el proyecto con:
-
-# 
-
-# ```bash
-
-# npx create-expo-app Pokemon --template blank
-
-# ```
-
-# 
-
-# 2\. Pegar tu código de ejemplo (`App.js`) con lista y detalle.
-
-# 3\. Ejecutar con:
-
-# 
-
-# ```bash
-
-# npm start
-
-# ```
-
-# 
-
-# 4\. Usar Expo Go para probar rápido en el teléfono.
-
-# 
-
-# ---
-
-# 
-
-# ¡Listo! Con esto tienes un \*\*README completo para tu examen\*\*, que explica desde cómo crear la app hasta cómo probarla y los conceptos clave de React Native con Expo.
-
-
-
+Probar con Expo Go o en Web.
