@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -8,62 +8,70 @@ import {
   Image,
   StyleSheet,
   Dimensions,
-} from 'react-native';
+} from "react-native";
 
-const { width } = Dimensions.get('window');
+const { width } = Dimensions.get("window");
 
-// API de héroes
-const API_BASE = 'https://thegreekmythapi.vercel.app/api/heroes';
+const API_BASE = "https://akabab.github.io/starwars-api/api/all.json";
 
 export default function App() {
 
-  // ESTADOS DE LA APLICACIÓN
-  const [heroes, setHeroes] = useState([]);
-  const [heroeSeleccionado, setHeroeSeleccionado] = useState(null);
+  // Guarda la lista de personajes obtenida de la API
+  const [personajes, setPersonajes] = useState([]);
+
+  // Guarda el personaje que el usuario ha seleccionado para ver detalles
+  const [personajeSeleccionado, setPersonajeSeleccionado] = useState(null);
+
+  // Indica si la aplicación está cargando datos de la API
   const [cargando, setCargando] = useState(true);
-  const [error, setError] = useState('');
+
+  // Guarda un mensaje de error si la petición a la API falla
+  const [error, setError] = useState("");
+
+  // Guarda el tamaño calculado de la imagen del personaje seleccionado
   const [imgSize, setImgSize] = useState(null);
 
-  // =========================
+  // CARGAR PERSONAJES
   // ACCESO ASÍNCRONO A LA API
-  // =========================
+
+  // Es asíncrono porque la llamada a la API puede tardar en responder.
+  // Usamos AWAIT para esperar la respuesta sin bloquear la ejecución de la aplicación.
+
+  // ¿Qué ocurre mientras se esperan los datos?
+  // Mientras esperamos los datos de la API, la aplicación sigue funcionando (el usuario puede interectuar o se ejecutan otras funciones)
+
   useEffect(() => {
-    async function cargarHeroes() {
+    async function cargarPersonajes() {
       try {
         setCargando(true);
-        setError('');
+        setError("");
 
         const res = await fetch(API_BASE);
-        if (!res.ok) {
-          throw new Error('Respuesta inválida del servidor');
-        }
+        if (!res.ok) throw new Error("Respuesta inválida del servidor");
 
         const json = await res.json();
-        setHeroes(json);
+        setPersonajes(json);
       } catch (e) {
-        setError('No se han podido cargar los héroes.');
+        setError("No se han podido cargar los personajes. Intentalo de nuevo");
       } finally {
         setCargando(false);
       }
     }
-
-    cargarHeroes();
+    cargarPersonajes();
   }, []);
 
-  // ==================================================
-  // CALCULAR TAMAÑO REAL DE LA IMAGEN DEL HÉROE
-  // ==================================================
+  // CALCULAR TAMAÑO DE LA IMAGEN
   useEffect(() => {
-    if (!heroeSeleccionado?.image) return;
+    if (!personajeSeleccionado?.image) return;
 
     Image.getSize(
-      heroeSeleccionado.image,
+      personajeSeleccionado.image,
       (w, h) => {
         const ratio = width / w;
         setImgSize({
-          width: width * 0.9,
-          height: h * ratio * 0.9,
-          alignSelf: 'center',
+          width: width * 0.15,
+          height: h * ratio * 0.15,
+          alignSelf: "center",
           marginVertical: 15,
         });
       },
@@ -71,61 +79,60 @@ export default function App() {
         setImgSize({
           width: width * 0.9,
           height: width * 0.6,
-          alignSelf: 'center',
+          alignSelf: "center",
           marginVertical: 15,
         });
       }
     );
-  }, [heroeSeleccionado]);
+  }, [personajeSeleccionado]);
 
-  // =========================
   // MENSAJES DE ESTADO
-  // =========================
+
   if (cargando) {
     return (
       <View style={styles.center}>
         <ActivityIndicator size="large" />
+        <Text style={{ marginTop: 10 }}>
+          Cargando personajes, espera un momento…
+        </Text>
       </View>
     );
   }
 
   if (error) {
-    return <Text style={{ padding: 20 }}>{error}</Text>;
+    return (
+      <View style={styles.center}>
+        <Text style={{ padding: 20, textAlign: "center" }}>{error}</Text>
+      </View>
+    );
   }
 
-  // =========================
-  // LISTADO DE HÉROES
-  // =========================
-  if (!heroeSeleccionado) {
+  // LISTADO DE PERSONAJES
+  if (!personajeSeleccionado) {
     return (
       <ScrollView style={styles.screen}>
-        <Text style={styles.title}>Héroes griegos</Text>
+        <Text style={styles.title}>Personajes de Star Wars</Text>
+        <Text style={styles.info}>Selecciona un personaje para ver más información</Text>
 
-        <Text style={styles.info}>
-          Selecciona un héroe para ver más información
-        </Text>
-
-        {heroes.map((heroe) => (
+        {personajes.map((p) => (
           <TouchableOpacity
-            key={heroe.id ?? heroe.name}
+            key={p.id}
             style={styles.item}
-            onPress={() => setHeroeSeleccionado(heroe)}
+            onPress={() => setPersonajeSeleccionado(p)}
           >
-            <Text style={styles.itemTitle}>{heroe.name}</Text>
+            <Text style={styles.itemTitle}>{p.name}</Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
     );
   }
 
-  // =========================
-  // DETALLE DEL HÉROE
-  // =========================
+  // DETALLE DEL PERSONAJE
   return (
     <ScrollView style={styles.screen}>
       <TouchableOpacity
         onPress={() => {
-          setHeroeSeleccionado(null);
+          setPersonajeSeleccionado(null);
           setImgSize(null);
         }}
         style={styles.back}
@@ -133,70 +140,126 @@ export default function App() {
         <Text style={styles.backText}>← Volver</Text>
       </TouchableOpacity>
 
-      <Text style={styles.detailTitle}>
-        {heroeSeleccionado.name}
-      </Text>
+      <Text style={styles.detailTitle}>{personajeSeleccionado.name}</Text>
 
-      {imgSize && (
+      {personajeSeleccionado.image && imgSize && (
         <Image
-          source={{ uri: heroeSeleccionado.image }}
+          source={{ uri: personajeSeleccionado.image }}
           style={imgSize}
           resizeMode="contain"
         />
       )}
 
-      <Text style={styles.description}>
-        {heroeSeleccionado.description}
-      </Text>
+      <View style={styles.contenedorDescripcion}>
+        <Text style={styles.description}>
+          <Text style={styles.bold}>Altura:</Text>{" "}
+          {personajeSeleccionado.height} m
+        </Text>
+
+        <Text style={styles.description}>
+          <Text style={styles.bold}>Peso:</Text> {personajeSeleccionado.mass} kg
+        </Text>
+
+        <Text style={styles.description}>
+          <Text style={styles.bold}>Color de cabello:</Text>{" "}
+          {personajeSeleccionado.hairColor}
+        </Text>
+
+        <Text style={styles.description}>
+          <Text style={styles.bold}>Color de ojos:</Text>{" "}
+          {personajeSeleccionado.eyeColor}
+        </Text>
+
+        <Text style={styles.description}>
+          <Text style={styles.bold}>Género:</Text>{" "}
+          {personajeSeleccionado.gender}
+        </Text>
+
+        <Text style={styles.description}>
+          <Text style={styles.bold}>Mundo natal:</Text>{" "}
+          {personajeSeleccionado.homeworld}
+        </Text>
+      </View>
     </ScrollView>
   );
 }
 
-// =========================
-// ESTILOS
-// =========================
 const styles = StyleSheet.create({
+  // la pantalla principal
   screen: {
+    flex: 1,
     padding: 20,
+    paddingTop: 50,
+    backgroundColor: "#213C51",
   },
   center: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
+  // título principal
   title: {
-    fontSize: 26,
-    fontWeight: 'bold',
+    fontSize: 30,
+    fontWeight: "bold",
     marginBottom: 10,
+    textAlign: "center",
+    color: "#ECEFCA",
   },
+  // mensaje que indica seleccionar un personaje
   info: {
     marginBottom: 15,
-    color: '#555',
+    color: "#F0FFDF",
+    fontSize: 18,
+    padding: 15,
   },
+  // fragmentos de cada personaje
   item: {
     padding: 15,
-    backgroundColor: '#eee',
+    backgroundColor: "#eee",
     borderRadius: 8,
     marginBottom: 10,
+    cursor: "pointer",
   },
   itemTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
+    color: "#0E2148",
   },
+  // la flechita de Volver
   back: {
-    marginBottom: 10,
+    marginBottom: 20,
   },
   backText: {
-    color: '#007AFF',
+    color: "#ECEFCA",
     fontSize: 16,
   },
+  // titulo de detalle
   detailTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: 34,
+    fontWeight: "bold",
     marginVertical: 10,
+    textAlign: "center",
+    fontWeight: "800",
+    color: "#EFE1B5",
   },
+  // texto de detalle
   description: {
     fontSize: 16,
     lineHeight: 22,
+    marginBottom: 5,
+    textAlign: "center",
+  },
+  // la parte inicial de texto (ALTURA; PESO...)
+  bold: {
+    fontWeight: "bold",
+    fontStyle: "italic",
+    textTransform: "uppercase",
+  },
+  // contenedor de textos de los detalles
+  contenedorDescripcion: {
+    backgroundColor: "#ECDFCC",
+    color: "#eee",
+    borderRadius: 20,
+    padding: 20,
   },
 });
